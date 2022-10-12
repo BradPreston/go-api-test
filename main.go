@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 
@@ -10,6 +11,7 @@ import (
 func main() {
 	r := chi.NewRouter()
 	r.Get("/", List)
+	fmt.Println("server running on port :8080")
 	http.ListenAndServe(":8080", r)
 }
 
@@ -20,11 +22,11 @@ func List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer resp.Body.Close()
-  
+
 	w.Header().Set("Content-Type", "application/json")
-  
+
 	if _, err := io.Copy(w, resp.Body); err != nil {
-	  http.Error(w, err.Error(), http.StatusInternalServerError)
-	  return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
